@@ -1,0 +1,15 @@
+﻿  ofApp.cpp
+     Creazione della libreria bin\OF__NoiseTextureGenerator.lib e dell'oggetto bin\OF__NoiseTextureGenerator.exp
+  Generazione codice in corso...
+  0 of 621 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Generazione codice terminata
+  OF__NoiseTextureGenerator.vcxproj -> C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\OF__NoiseTextureGenerator.exe
+  
+  	                   2	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\libs\fmodex\lib\vs\Win32\
+  	  *File supplementare		 5647872	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\FreeImage.dll
+  
+  	                   1	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\libs\FreeImage\lib\vs\Win32\
+  	  *File supplementare		 1266176	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex.dll
+  	  *File supplementare		 1312768	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL.dll
