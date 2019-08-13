@@ -1,0 +1,10 @@
+﻿  ofApp.cpp
+     Creazione della libreria bin\OF__NoiseTextureGenerator_debug.lib e dell'oggetto bin\OF__NoiseTextureGenerator_debug.exp
+  OF__NoiseTextureGenerator.vcxproj -> D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\OF__NoiseTextureGenerator_debug.exe
+  
+  	                   2	D:\07_OF\of_v0.10.0_vs2017_release\libs\fmodex\lib\vs\Win32\
+  	  *File supplementare		 5647872	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\FreeImage.dll
+  
+  	                   1	D:\07_OF\of_v0.10.0_vs2017_release\libs\FreeImage\lib\vs\Win32\
+  	  *File supplementare		 1266176	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex.dll
+  	  *File supplementare		 1312768	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL.dll

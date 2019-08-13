@@ -16,10 +16,6 @@ out vec4 outputColor;
 
 // custom
 
-uniform float red;
-uniform float green;
-uniform float blue;
-
 uniform float time;
 
 float random2D(in vec2 p) {
@@ -27,12 +23,13 @@ float random2D(in vec2 p) {
 }
 
 float random3D(in vec2 p, in float t) {
-  return fract(sin(dot(vec3(p, t), vec3(12.9898, 78.238, t * .0001))) * 43758.5453123);
+  return fract(sin(dot(vec3(p, t), vec3(12.9898, 78.238, t * 0.1660292952273831))) * 43758.5453123);
 }
 
 void main()
 {
     vec2 st = gl_FragCoord.xy / vec2(1920., 1200.);
+
     vec3 color = vec3(random3D(st.xy, time));
 
     outputColor = vec4(color, 1.);

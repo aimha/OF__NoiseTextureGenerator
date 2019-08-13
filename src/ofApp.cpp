@@ -24,9 +24,7 @@ void ofApp::setup(){
 
 	// gui setup
 	gui.setup("Parameters", "settings.xml");
-	gui.add(red.setup("red", 0., 0., 100.));
-	gui.add(green.setup("green", 0., 0., 100.));
-	gui.add(blue.setup("blue", 0., 0., 100.));
+	//gui.add(renameMe.setup("renameMe", 0., 0., 100.));
 }
 
 //--------------------------------------------------------------
@@ -38,9 +36,6 @@ void ofApp::update(){
 		fbmShader.begin();
 
 		// pass uniforms to shader
-		fbmShader.setUniform1f("red", red);
-		fbmShader.setUniform1f("green", green);
-		fbmShader.setUniform1f("blue", blue);
 		fbmShader.setUniform1f("time", ofGetElapsedTimef());
 
 		// matrix transformations

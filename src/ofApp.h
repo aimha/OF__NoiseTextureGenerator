@@ -23,9 +23,7 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 		ofxPanel gui;
-		ofxFloatSlider red;
-		ofxFloatSlider green;
-		ofxFloatSlider blue;
+		ofxFloatSlider renameMe;
 
 		ofPlanePrimitive plane;
 
