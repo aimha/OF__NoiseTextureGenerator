@@ -25,14 +25,20 @@ void ofApp::setup(){
 	fbo.allocate(w, h);
 
 	// gui setup
-	gui.setup("Parameters", "settings.xml");
-	gui.add(noiseSeed.setup("noise seed", 1., 1., 20.));
-	gui.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
-	gui.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
-	gui.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 2.));
-	gui.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
-	gui.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 2.));
-	gui.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
+	guiNoises.setup("Noise Settings", "noiseSettings.xml");
+	guiFbm.setup("Fbm Settings", "fbmSettings.xml");
+
+	guiNoises.add(noiseSeed.setup("noise seed", 1., 1., 20.));
+	guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
+	guiNoises.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
+	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 2.));
+	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
+	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 2.));
+	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
+
+	guiFbm.add(fbmAmplitude.setup("FBM Amplitude", .5, 0., 1.));
+	guiFbm.add(fbmScaleFactor.setup("FBM Scale Factor", 2., 0., 4.));
+
 }
 
 //--------------------------------------------------------------
@@ -53,6 +59,8 @@ void ofApp::update(){
 		fbmShader.setUniform1f("gradientAmnt", gradientNoiseAmnt);
 		fbmShader.setUniform1f("simplexScale", simplexNoiseScale);
 		fbmShader.setUniform1f("simplexAmnt", simplexNoiseAmnt);
+		fbmShader.setUniform1f("fbmAmplitude", fbmAmplitude);
+		fbmShader.setUniform1f("fbmScaleFactor", fbmScaleFactor);
 
 		// matrix transformations
 		ofPushMatrix();
@@ -74,7 +82,8 @@ void ofApp::draw(){
 	fbo.draw(0, 0, w, h);
 
 	// draw gui
-	gui.draw();
+	guiNoises.draw();
+	guiFbm.draw();
 }
 
 //--------------------------------------------------------------

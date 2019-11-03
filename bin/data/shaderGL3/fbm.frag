@@ -18,7 +18,7 @@ out vec4 outputColor;
 
 uniform float time, planeSize, seed;
 
-uniform float valueScale, gradientScale, simplexScale, valueAmnt, gradientAmnt, simplexAmnt;
+uniform float valueScale, gradientScale, simplexScale, valueAmnt, gradientAmnt, simplexAmnt, fbmAmplitude, fbmScaleFactor;
 
 /**************************************************************/
 
@@ -119,7 +119,7 @@ float snoise2D (vec2 st) {
 #define OCTAVES 8
 float fbm (in vec2 st) {
     float value = 0.0;
-    float amplitude = .5;
+    float amplitude = fbmAmplitude;
     float frequency = 0.;
     for (int i = 0; i < OCTAVES; i++) {
         value += amplitude * (
@@ -127,8 +127,8 @@ float fbm (in vec2 st) {
           (simplexAmnt * snoise2D(st)) +
           (gradientAmnt * gnoise2D(st))
         );
-        st *= 2.;
-        amplitude *= .5;
+        st *= fbmScaleFactor;
+        amplitude *= fbmAmplitude;
     }
     return value;
 }
@@ -138,8 +138,6 @@ void main()
   vec2 st = gl_FragCoord.xy / vec2(planeSize, planeSize);
 
   float n = fbm(st + fbm(st + fbm(st + fbm(st)))); // DOMAIN WARPING
-
-  //vec3 color = 0.25 + 0.75 * n;
 
   vec3 color1 = mix(
     vec3(0.0471, 0.6941, 0.6588),

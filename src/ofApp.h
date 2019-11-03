@@ -27,15 +27,19 @@ class ofApp : public ofBaseApp{
 		float w, h, planeSize, planeRes;
 
 		// GUI
-		ofxPanel gui;
-		ofxFloatSlider renameMe;
+		ofxPanel guiNoises;
+		ofxPanel guiFbm;
+
 		ofxFloatSlider noiseSeed;
 		ofxFloatSlider valueNoiseScale;
-		ofxFloatSlider gradientNoiseScale;
-		ofxFloatSlider simplexNoiseScale;
 		ofxFloatSlider valueNoiseAmnt;
+		ofxFloatSlider gradientNoiseScale;
 		ofxFloatSlider gradientNoiseAmnt;
+		ofxFloatSlider simplexNoiseScale;
 		ofxFloatSlider simplexNoiseAmnt;
+
+		ofxFloatSlider fbmAmplitude;
+		ofxFloatSlider fbmScaleFactor;
 
 		// PLANE
 		ofPlanePrimitive plane;
