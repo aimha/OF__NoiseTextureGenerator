@@ -18,7 +18,13 @@ out vec4 outputColor;
 
 uniform float time, planeSize, seed;
 
-uniform float valueScale, gradientScale, simplexScale, valueAmnt, gradientAmnt, simplexAmnt, fbmAmplitude, fbmScaleFactor;
+uniform float valueScale, gradientScale, simplexScale,
+              valueAmnt, gradientAmnt, simplexAmnt,
+              fbmAmplitude, fbmScaleFactor,
+              colorsColor1Red, colorsColor1Green, colorsColor1Blue,
+              colorsColor2Red, colorsColor2Green, colorsColor2Blue,
+              colorsColor3Red, colorsColor3Green, colorsColor3Blue,
+              colorsColor4Red, colorsColor4Green, colorsColor4Blue;
 
 /**************************************************************/
 
@@ -140,14 +146,14 @@ void main()
   float n = fbm(st + fbm(st + fbm(st + fbm(st)))); // DOMAIN WARPING
 
   vec3 color1 = mix(
-    vec3(0.0471, 0.6941, 0.6588),
-    vec3(0.0, 0.0235, 0.2314),
+    vec3(colorsColor1Red, colorsColor1Green, colorsColor1Blue),
+    vec3(colorsColor2Red, colorsColor2Green, colorsColor2Blue),
     n
   );
 
   vec3 color2 = mix(
-    vec3(1.0, 0.0, 0.4667),
-    vec3(0.1294, 0.0, 0.2118),
+    vec3(colorsColor3Red, colorsColor3Green, colorsColor3Blue),
+    vec3(colorsColor4Red, colorsColor4Green, colorsColor4Blue),
     1. - n
   );
 

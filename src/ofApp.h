@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxColorPicker.h"
 
 class ofApp : public ofBaseApp{
 
@@ -29,6 +30,7 @@ class ofApp : public ofBaseApp{
 		// GUI
 		ofxPanel guiNoises;
 		ofxPanel guiFbm;
+		ofxPanel guiColors;
 
 		ofxFloatSlider noiseSeed;
 		ofxFloatSlider valueNoiseScale;
@@ -40,6 +42,19 @@ class ofApp : public ofBaseApp{
 
 		ofxFloatSlider fbmAmplitude;
 		ofxFloatSlider fbmScaleFactor;
+
+		ofxFloatSlider colorsColor1Red;
+		ofxFloatSlider colorsColor1Green;
+		ofxFloatSlider colorsColor1Blue;
+		ofxFloatSlider colorsColor2Red;
+		ofxFloatSlider colorsColor2Green;
+		ofxFloatSlider colorsColor2Blue;
+		ofxFloatSlider colorsColor3Red;
+		ofxFloatSlider colorsColor3Green;
+		ofxFloatSlider colorsColor3Blue;
+		ofxFloatSlider colorsColor4Red;
+		ofxFloatSlider colorsColor4Green;
+		ofxFloatSlider colorsColor4Blue;
 
 		// PLANE
 		ofPlanePrimitive plane;

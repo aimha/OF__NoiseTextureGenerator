@@ -27,6 +27,10 @@ void ofApp::setup(){
 	// gui setup
 	guiNoises.setup("Noise Settings", "noiseSettings.xml");
 	guiFbm.setup("Fbm Settings", "fbmSettings.xml");
+	guiColors.setup("Colors Settings", "colorsSettings.xml");
+
+	guiFbm.setPosition(0, 200);
+	guiColors.setPosition(0, 400);
 
 	guiNoises.add(noiseSeed.setup("noise seed", 1., 1., 20.));
 	guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
@@ -39,6 +43,18 @@ void ofApp::setup(){
 	guiFbm.add(fbmAmplitude.setup("FBM Amplitude", .5, 0., 1.));
 	guiFbm.add(fbmScaleFactor.setup("FBM Scale Factor", 2., 0., 4.));
 
+	guiColors.add(colorsColor1Red.setup("COLOR 1 RED", 0., 0., 1.));
+	guiColors.add(colorsColor1Green.setup("COLOR 1 GREEN", 0., 0., 1.));
+	guiColors.add(colorsColor1Blue.setup("COLOR 1 BLUE", 0., 0., 1.));
+	guiColors.add(colorsColor2Red.setup("COLOR 2 RED", 0., 0., 1.));
+	guiColors.add(colorsColor2Green.setup("COLOR 2 GREEN", 0., 0., 1.));
+	guiColors.add(colorsColor2Blue.setup("COLOR 2 BLUE", 0., 0., 1.));
+	guiColors.add(colorsColor3Red.setup("COLOR 3 RED", 0., 0., 1.));
+	guiColors.add(colorsColor3Green.setup("COLOR 3 GREEN", 0., 0., 1.));
+	guiColors.add(colorsColor3Blue.setup("COLOR 3 BLUE", 0., 0., 1.));
+	guiColors.add(colorsColor4Red.setup("COLOR 4 RED", 0., 0., 1.));
+	guiColors.add(colorsColor4Green.setup("COLOR 4 GREEN", 0., 0., 1.));
+	guiColors.add(colorsColor4Blue.setup("COLOR 4 BLUE", 0., 0., 1.));
 }
 
 //--------------------------------------------------------------
@@ -59,8 +75,22 @@ void ofApp::update(){
 		fbmShader.setUniform1f("gradientAmnt", gradientNoiseAmnt);
 		fbmShader.setUniform1f("simplexScale", simplexNoiseScale);
 		fbmShader.setUniform1f("simplexAmnt", simplexNoiseAmnt);
+		
 		fbmShader.setUniform1f("fbmAmplitude", fbmAmplitude);
 		fbmShader.setUniform1f("fbmScaleFactor", fbmScaleFactor);
+
+		fbmShader.setUniform1f("colorsColor1Red", colorsColor1Red);
+		fbmShader.setUniform1f("colorsColor1Green", colorsColor1Green);
+		fbmShader.setUniform1f("colorsColor1Blue", colorsColor1Blue);
+		fbmShader.setUniform1f("colorsColor2Red", colorsColor2Red);
+		fbmShader.setUniform1f("colorsColor2Green", colorsColor2Green);
+		fbmShader.setUniform1f("colorsColor2Blue", colorsColor2Blue);
+		fbmShader.setUniform1f("colorsColor3Red", colorsColor3Red);
+		fbmShader.setUniform1f("colorsColor3Green", colorsColor3Green);
+		fbmShader.setUniform1f("colorsColor3Blue", colorsColor3Blue);
+		fbmShader.setUniform1f("colorsColor4Red", colorsColor4Red);
+		fbmShader.setUniform1f("colorsColor4Green", colorsColor4Green);
+		fbmShader.setUniform1f("colorsColor4Blue", colorsColor4Blue);
 
 		// matrix transformations
 		ofPushMatrix();
@@ -84,6 +114,7 @@ void ofApp::draw(){
 	// draw gui
 	guiNoises.draw();
 	guiFbm.draw();
+	guiColors.draw();
 }
 
 //--------------------------------------------------------------
