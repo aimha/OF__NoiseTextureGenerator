@@ -22,14 +22,28 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		// general
+
+		float w, h, planeSize, planeRes;
+
+		// GUI
 		ofxPanel gui;
 		ofxFloatSlider renameMe;
+		ofxFloatSlider noiseSeed;
+		ofxFloatSlider valueNoiseScale;
+		ofxFloatSlider gradientNoiseScale;
+		ofxFloatSlider simplexNoiseScale;
+		ofxFloatSlider valueNoiseAmnt;
+		ofxFloatSlider gradientNoiseAmnt;
+		ofxFloatSlider simplexNoiseAmnt;
 
+		// PLANE
 		ofPlanePrimitive plane;
 
+		// SHADER
 		ofShader fbmShader;
 
+		// FBO
 		ofFbo fbo;
 
-		float w, h;
 };

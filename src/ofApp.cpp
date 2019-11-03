@@ -10,21 +10,29 @@ void ofApp::setup(){
 	// set variables
 	w = ofGetWidth();
 	h = ofGetHeight();
+	planeSize = 1000;
+	planeRes = 2;
 
 	// shader setup
 	fbmShader.load("shaderGL3/fbm");
 
 	//plane setup
-	plane.set(800, 800);
+	plane.set(planeSize, planeSize);
 	plane.setPosition(0, 0, 0);
-	plane.setResolution(400, 400);
+	plane.setResolution(planeRes, planeRes);
 
 	// fbo setup
 	fbo.allocate(w, h);
 
 	// gui setup
 	gui.setup("Parameters", "settings.xml");
-	//gui.add(renameMe.setup("renameMe", 0., 0., 100.));
+	gui.add(noiseSeed.setup("noise seed", 1., 1., 20.));
+	gui.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
+	gui.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
+	gui.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 2.));
+	gui.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
+	gui.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 2.));
+	gui.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
 }
 
 //--------------------------------------------------------------
@@ -37,6 +45,14 @@ void ofApp::update(){
 
 		// pass uniforms to shader
 		fbmShader.setUniform1f("time", ofGetElapsedTimef());
+		fbmShader.setUniform1f("planeSize", planeSize);
+		fbmShader.setUniform1f("seed", noiseSeed);
+		fbmShader.setUniform1f("valueScale", valueNoiseScale);
+		fbmShader.setUniform1f("valueAmnt", valueNoiseAmnt);
+		fbmShader.setUniform1f("gradientScale", gradientNoiseScale);
+		fbmShader.setUniform1f("gradientAmnt", gradientNoiseAmnt);
+		fbmShader.setUniform1f("simplexScale", simplexNoiseScale);
+		fbmShader.setUniform1f("simplexAmnt", simplexNoiseAmnt);
 
 		// matrix transformations
 		ofPushMatrix();
