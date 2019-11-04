@@ -65,4 +65,7 @@ class ofApp : public ofBaseApp{
 		// FBO
 		ofFbo fbo;
 
+		// SAVE IMG
+		ofPixels pix;
+
 };

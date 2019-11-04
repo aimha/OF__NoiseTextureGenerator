@@ -10,7 +10,7 @@ void ofApp::setup(){
 	// set variables
 	w = ofGetWidth();
 	h = ofGetHeight();
-	planeSize = 1000;
+	planeSize = 1200;
 	planeRes = 2;
 
 	// shader setup
@@ -119,7 +119,10 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	if (key == 's') {
+		fbo.readToPixels(pix);
+		ofSaveImage(pix, "test.jpg");
+	}
 }
 
 //--------------------------------------------------------------
