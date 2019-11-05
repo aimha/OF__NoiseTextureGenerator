@@ -32,7 +32,7 @@ void ofApp::setup(){
 	guiFbm.setPosition(0, 200);
 	guiColors.setPosition(0, 400);
 
-	guiNoises.add(noiseSeed.setup("noise seed", 1., 1., 20.));
+	guiNoises.add(noiseSeed.setup("noise seed", 1., 0., 2.));
 	guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
 	guiNoises.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
 	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 2.));
@@ -40,8 +40,8 @@ void ofApp::setup(){
 	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 2.));
 	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
 
-	guiFbm.add(fbmAmplitude.setup("FBM Amplitude", .5, 0., 1.));
-	guiFbm.add(fbmScaleFactor.setup("FBM Scale Factor", 2., 0., 4.));
+	guiFbm.add(fbmHurst.setup("FBM Hurst", .5, 0., 1.));
+	guiFbm.add(fbmFrequency.setup("FBM frequency", 2., 0., 4.));
 
 	guiColors.add(colorsColor1Red.setup("COLOR 1 RED", 0., 0., 1.));
 	guiColors.add(colorsColor1Green.setup("COLOR 1 GREEN", 0., 0., 1.));
@@ -76,8 +76,8 @@ void ofApp::update(){
 		fbmShader.setUniform1f("simplexScale", simplexNoiseScale);
 		fbmShader.setUniform1f("simplexAmnt", simplexNoiseAmnt);
 		
-		fbmShader.setUniform1f("fbmAmplitude", fbmAmplitude);
-		fbmShader.setUniform1f("fbmScaleFactor", fbmScaleFactor);
+		fbmShader.setUniform1f("fbmHurst", fbmHurst);
+		fbmShader.setUniform1f("fbmFrequency", fbmFrequency);
 
 		fbmShader.setUniform1f("colorsColor1Red", colorsColor1Red);
 		fbmShader.setUniform1f("colorsColor1Green", colorsColor1Green);
@@ -121,7 +121,9 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
 	if (key == 's') {
 		fbo.readToPixels(pix);
-		ofSaveImage(pix, "test.jpg");
+		float timeStamp = ofGetSystemTimeMillis();
+		string imgName = ofToString(timeStamp) + "--grad.jpg";
+		ofSaveImage(pix, imgName);
 	}
 }
 

@@ -40,8 +40,8 @@ class ofApp : public ofBaseApp{
 		ofxFloatSlider simplexNoiseScale;
 		ofxFloatSlider simplexNoiseAmnt;
 
-		ofxFloatSlider fbmAmplitude;
-		ofxFloatSlider fbmScaleFactor;
+		ofxFloatSlider fbmHurst;
+		ofxFloatSlider fbmFrequency;
 
 		ofxFloatSlider colorsColor1Red;
 		ofxFloatSlider colorsColor1Green;

@@ -20,7 +20,7 @@ uniform float time, planeSize, seed;
 
 uniform float valueScale, gradientScale, simplexScale,
               valueAmnt, gradientAmnt, simplexAmnt,
-              fbmAmplitude, fbmScaleFactor,
+              fbmHurst, fbmFrequency,
               colorsColor1Red, colorsColor1Green, colorsColor1Blue,
               colorsColor2Red, colorsColor2Green, colorsColor2Blue,
               colorsColor3Red, colorsColor3Green, colorsColor3Blue,
@@ -125,16 +125,16 @@ float snoise2D (vec2 st) {
 #define OCTAVES 8
 float fbm (in vec2 st) {
     float value = 0.0;
-    float amplitude = fbmAmplitude;
+    float amplitude = fbmHurst;
     float frequency = 0.;
     for (int i = 0; i < OCTAVES; i++) {
-        value += amplitude * (
-          (valueAmnt * vnoise2D(st)) +
-          (simplexAmnt * snoise2D(st)) +
-          (gradientAmnt * gnoise2D(st))
-        );
-        st *= fbmScaleFactor;
-        amplitude *= fbmAmplitude;
+      value += amplitude * (
+        (valueAmnt * vnoise2D(st)) +
+        (simplexAmnt * snoise2D(st)) +
+        (gradientAmnt * gnoise2D(st))
+      );
+      st *= fbmFrequency;
+      amplitude *= fbmHurst;
     }
     return value;
 }
