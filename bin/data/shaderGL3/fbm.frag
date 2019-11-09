@@ -18,8 +18,12 @@ out vec4 outputColor;
 
 uniform float time, planeSize, seed;
 
-uniform float valueScale, gradientScale, simplexScale,
-              valueAmnt, gradientAmnt, simplexAmnt,
+uniform int fbmOctaves, fbmWarp;
+
+uniform float valueNoise, valueAmnt, valueScale, 
+              gradientNoise, gradientAmnt, gradientScale, 
+              simplexNoise, simplexAmnt, simplexScale,
+              voronoiNoise, voronoiAmnt, voronoiScale,
               fbmHurst, fbmFrequency,
               colorsColor1Red, colorsColor1Green, colorsColor1Blue,
               colorsColor2Red, colorsColor2Green, colorsColor2Blue,
@@ -121,17 +125,46 @@ float snoise2D (vec2 st) {
     return dot( n, vec3(70.) );              // scaling up the noise
 }
 
+
+// VORONOI NOISE
+float voronoi2D(in vec2 st) {
+  st *= voronoiScale;
+
+	float minDist = 100.;
+
+  vec2 gv = fract(st) - .5;
+  vec2 id = floor(st);
+  vec2 cid = vec2(0.);
+
+  for (float y = -1.; y <= 1.; y++) {
+    for (float x = -1.; x <= 1.; x++) {
+      vec2 offset = vec2(x, y);
+
+      vec2 n = ghash(vec2(id + offset));
+      vec2 p = offset + sin(n) * .5;
+
+      float d = length(gv-p) * length(gv-p);
+
+      if (d < minDist) {
+        minDist = d;
+      }
+    }
+  }
+  return minDist;
+}
+
+
 // FRACTIONAL BROWNIAN MOTION
-#define OCTAVES 8
 float fbm (in vec2 st) {
     float value = 0.0;
     float amplitude = fbmHurst;
     float frequency = 0.;
-    for (int i = 0; i < OCTAVES; i++) {
+    for (int i = 0; i < fbmOctaves; i++) {
       value += amplitude * (
-        (valueAmnt * vnoise2D(st)) +
-        (simplexAmnt * snoise2D(st)) +
-        (gradientAmnt * gnoise2D(st))
+        (valueAmnt * vnoise2D(st) * valueNoise) +
+        (simplexAmnt * snoise2D(st) * simplexNoise) +
+        (gradientAmnt * gnoise2D(st) * gradientNoise) +
+        (voronoiAmnt * voronoi2D(st) * voronoiNoise)
       );
       st *= fbmFrequency;
       amplitude *= fbmHurst;
@@ -143,8 +176,18 @@ void main()
 {
   vec2 st = gl_FragCoord.xy / vec2(planeSize, planeSize);
 
-  float n = fbm(st + fbm(st + fbm(st + fbm(st)))); // DOMAIN WARPING
+  // DOMAIN WARPING
+  float k = 0.;
+  float n = 0.;
 
+  st += vec2(0., 0.);
+
+  for (int i = 0; i < fbmWarp; i++) {
+    n = fbm(st + k);
+    k = n;
+  }
+
+  // COLORING
   vec3 color1 = mix(
     vec3(colorsColor1Red, colorsColor1Green, colorsColor1Blue),
     vec3(colorsColor2Red, colorsColor2Green, colorsColor2Blue),
@@ -154,10 +197,10 @@ void main()
   vec3 color2 = mix(
     vec3(colorsColor3Red, colorsColor3Green, colorsColor3Blue),
     vec3(colorsColor4Red, colorsColor4Green, colorsColor4Blue),
-    1. - n
+    n
   );
 
   vec3 color = mix(color1, color2, n);
 
-  outputColor = vec4(color, 1.);
+  outputColor = vec4((n*n*n+.6*n*n+.5*n)*color, 1.);
 }

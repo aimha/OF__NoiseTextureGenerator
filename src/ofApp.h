@@ -39,9 +39,17 @@ class ofApp : public ofBaseApp{
 		ofxFloatSlider gradientNoiseAmnt;
 		ofxFloatSlider simplexNoiseScale;
 		ofxFloatSlider simplexNoiseAmnt;
+		ofxFloatSlider voronoiNoiseScale;
+		ofxFloatSlider voronoiNoiseAmnt;
+		ofxToggle valueNoise;
+		ofxToggle gradientNoise;
+		ofxToggle simplexNoise;
+		ofxToggle voronoiNoise;
 
 		ofxFloatSlider fbmHurst;
 		ofxFloatSlider fbmFrequency;
+		ofxIntSlider fbmOctaves;
+		ofxIntSlider fbmWarp;
 
 		ofxFloatSlider colorsColor1Red;
 		ofxFloatSlider colorsColor1Green;
