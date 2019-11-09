@@ -32,6 +32,8 @@ class ofApp : public ofBaseApp{
 		ofxPanel guiFbm;
 		ofxPanel guiColors;
 
+		ofxVec2Slider center;
+
 		ofxFloatSlider noiseSeed;
 		ofxFloatSlider valueNoiseScale;
 		ofxFloatSlider valueNoiseAmnt;

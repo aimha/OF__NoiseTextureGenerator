@@ -51,6 +51,7 @@ void ofApp::setup(){
 	guiFbm.add(fbmFrequency.setup("FBM frequency", 2., 0., 4.));
 	guiFbm.add(fbmOctaves.setup("FBM Octaves", 8, 1, 12));
 	guiFbm.add(fbmWarp.setup("FBM Warp", 3, 0, 4));
+	guiFbm.add(center.setup("center", ofVec2f(.0, .0), ofVec2f(.0, .0), ofVec2f(10., 10.)));
 
 	guiColors.add(colorsColor1Red.setup("COLOR 1 RED", 0., 0., 1.));
 	guiColors.add(colorsColor1Green.setup("COLOR 1 GREEN", 0., 0., 1.));
@@ -95,6 +96,7 @@ void ofApp::update(){
 		fbmShader.setUniform1f("fbmFrequency", fbmFrequency);
 		fbmShader.setUniform1i("fbmOctaves", fbmOctaves);
 		fbmShader.setUniform1i("fbmWarp", fbmWarp);
+		fbmShader.setUniform2f("center", center);
 
 		fbmShader.setUniform1f("colorsColor1Red", colorsColor1Red);
 		fbmShader.setUniform1f("colorsColor1Green", colorsColor1Green);

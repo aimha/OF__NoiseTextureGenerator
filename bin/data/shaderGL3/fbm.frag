@@ -18,6 +18,8 @@ out vec4 outputColor;
 
 uniform float time, planeSize, seed;
 
+uniform vec2 center;
+
 uniform int fbmOctaves, fbmWarp;
 
 uniform float valueNoise, valueAmnt, valueScale, 
@@ -180,7 +182,7 @@ void main()
   float k = 0.;
   float n = 0.;
 
-  st += vec2(0., 0.);
+  st += center;
 
   for (int i = 0; i < fbmWarp; i++) {
     n = fbm(st + k);
