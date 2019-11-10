@@ -26,16 +26,15 @@ uniform float valueNoise, valueAmnt, valueScale,
               gradientNoise, gradientAmnt, gradientScale, 
               simplexNoise, simplexAmnt, simplexScale,
               voronoiNoise, voronoiAmnt, voronoiScale,
-              fbmHurst, fbmFrequency,
+              fbmHurst, fbmFrequency, fbmRotation, warpRotation,
               colorsColor1Red, colorsColor1Green, colorsColor1Blue,
               colorsColor2Red, colorsColor2Green, colorsColor2Blue,
               colorsColor3Red, colorsColor3Green, colorsColor3Blue,
               colorsColor4Red, colorsColor4Green, colorsColor4Blue;
 
+#define PI 3.14159265359
+
 /**************************************************************/
-
-// PALETTE
-
 
 // HASH FUNCTIONS
 float vhash (uvec2 x) {
@@ -100,31 +99,29 @@ float snoise2D (vec2 st) {
 
   const float K1 = 0.366025404;                 // (sqrt(3)-1)/2;
   const float K2 = 0.211324865;                 // (3-sqrt(3))/6;
-    
+
 	vec2  i = floor( st + (st.x + st.y) * K1 );   // integer part
   vec2  a = st - i + (i.x + i.y) * K2;          // fract part
 
-    
-    float m = step(a.y, a.x);                   // which triangle we are in
-    vec2 o = vec2(m,1.0-m);                     // origin selector
-    
-    vec2  b = a - o + K2;                       // distance between a and the origin
-    vec2  c = a - 1.0 + 2.0 * K2;               // distance between a and other vertex
-    
-    vec3  h = max( 0.5 - vec3(                  // kernel
-      dot(a,a),                               // same as magnitude squared
-      dot(b,b),                               // same as magnitude squared
-      dot(c,c)                                // same as magnitude squared
-    ), 0.0 );
-    
-    
-    vec3  n = h*h*h*h*vec3(
-      dot(a, ghash( i + 0.)),                 // gradient computation
-      dot(b, ghash( i + o)),                  // gradient computation
-      dot(c, ghash( i + 1.0))                 // gradient computation
-    );
-    
-    return dot( n, vec3(70.) );              // scaling up the noise
+  float m = step(a.y, a.x);                   // which triangle we are in
+  vec2 o = vec2(m,1.0-m);                     // origin selector
+  
+  vec2  b = a - o + K2;                       // distance between a and the origin
+  vec2  c = a - 1.0 + 2.0 * K2;               // distance between a and other vertex
+
+  vec3  h = max( 0.5 - vec3(                  // kernel
+    dot(a,a),                               // same as magnitude squared
+    dot(b,b),                               // same as magnitude squared
+    dot(c,c)                                // same as magnitude squared
+  ), 0.0 );
+
+  vec3  n = h*h*h*h*vec3(
+    dot(a, ghash( i + 0.)),                 // gradient computation
+    dot(b, ghash( i + o)),                  // gradient computation
+    dot(c, ghash( i + 1.0))                 // gradient computation
+  );
+
+  return dot( n, vec3(70.) );              // scaling up the noise
 }
 
 
@@ -132,23 +129,23 @@ float snoise2D (vec2 st) {
 float voronoi2D(in vec2 st) {
   st *= voronoiScale;
 
-	float minDist = 100.;
+	float minDist = 100.; // we impose a large minDist
 
-  vec2 gv = fract(st) - .5;
-  vec2 id = floor(st);
-  vec2 cid = vec2(0.);
+  vec2 id = floor(st);  // the number of the cell we are in
+  vec2 gv = fract(st) - .5; // adjusted space inside the cell, from 0 to 1 to -.5 to .5
 
-  for (float y = -1.; y <= 1.; y++) {
-    for (float x = -1.; x <= 1.; x++) {
-      vec2 offset = vec2(x, y);
+  for (float y = -1.; y <= 1.; y++) {     // this double loop searches for the neighbouring points
+    for (float x = -1.; x <= 1.; x++) {   // in the 9 cell around our ID cell
+      vec2 offset = vec2(x, y);           // which cell we are  in
 
-      vec2 n = ghash(vec2(id + offset));
-      vec2 p = offset + sin(n) * .5;
+      vec2 n = ghash(vec2(id + offset));  // random value for that specific cell
+      vec2 p = offset + sin(n) * .5;      //  the random value is transformed in a position vector inside the                                    //   cell we are in
 
-      float d = length(gv-p) * length(gv-p);
+      float d = length(gv-p);  // square distance between p and our center point gv
+      d *= d;
 
       if (d < minDist) {
-        minDist = d;
+        minDist = d;    // minDist is updated
       }
     }
   }
@@ -158,20 +155,27 @@ float voronoi2D(in vec2 st) {
 
 // FRACTIONAL BROWNIAN MOTION
 float fbm (in vec2 st) {
-    float value = 0.0;
-    float amplitude = fbmHurst;
-    float frequency = 0.;
-    for (int i = 0; i < fbmOctaves; i++) {
-      value += amplitude * (
-        (valueAmnt * vnoise2D(st) * valueNoise) +
-        (simplexAmnt * snoise2D(st) * simplexNoise) +
-        (gradientAmnt * gnoise2D(st) * gradientNoise) +
-        (voronoiAmnt * voronoi2D(st) * voronoiNoise)
-      );
-      st *= fbmFrequency;
-      amplitude *= fbmHurst;
-    }
-    return value;
+  float value = 0.0;
+  float amplitude = fbmHurst;
+  float frequency = 0.;
+    
+  mat2 fbmRotMat = mat2(
+    cos(fbmRotation * PI), sin(fbmRotation * PI),
+    -sin(fbmRotation * PI), cos(fbmRotation * PI)
+  );
+
+  for (int i = 0; i < fbmOctaves; i++) {
+    value += amplitude * (
+      (valueAmnt * vnoise2D(st) * valueNoise) +
+      (simplexAmnt * snoise2D(st) * simplexNoise) +
+      (gradientAmnt * gnoise2D(st) * gradientNoise) +
+      (voronoiAmnt * voronoi2D(st) * voronoiNoise)
+    );
+    st *= fbmFrequency;
+    st = fbmRotMat * st;
+    amplitude *= fbmHurst;
+  }
+  return value;
 }
 
 void main()
@@ -184,9 +188,15 @@ void main()
 
   st += center;
 
+  mat2 warpRotMat = mat2(
+    cos(warpRotation * PI), sin(warpRotation * PI),
+    -sin(warpRotation * PI), cos(warpRotation * PI)
+  );
+
   for (int i = 0; i < fbmWarp; i++) {
     n = fbm(st + k);
     k = n;
+    st = warpRotMat * st;
   }
 
   // COLORING

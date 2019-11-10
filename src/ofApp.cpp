@@ -26,31 +26,34 @@ void ofApp::setup(){
 
 	// gui setup
 	guiNoises.setup("Noise Settings", "noiseSettings.xml");
+	guiVariations.setup("Noise Variation", "variationSettings.xml");
 	guiFbm.setup("Fbm Settings", "fbmSettings.xml");
 	guiColors.setup("Colors Settings", "colorsSettings.xml");
 
 	guiNoises.setPosition(50, 0);
-	guiFbm.setPosition(50, 300);
-	guiColors.setPosition(50, 600);
+	guiFbm.setPosition(50, 280);
+	guiVariations.setPosition(50, 480);
+	guiColors.setPosition(50, 580);
+	
 
-	guiNoises.add(noiseSeed.setup("noise seed", 1., 0., 2.));
 	guiNoises.add(valueNoise.setup("value noise", true));
-	guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 20.));
+	guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
 	guiNoises.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
 	guiNoises.add(gradientNoise.setup("gradient noise", true));
-	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 20.));
+	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 2.));
 	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
 	guiNoises.add(simplexNoise.setup("simplex noise", true));
-	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 20.));
+	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 2.));
 	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
 	guiNoises.add(voronoiNoise.setup("voronoi noise", true));
-	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 20.));
+	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 2.));
 	guiNoises.add(voronoiNoiseAmnt.setup("voronoi noise amount", 1., 0., 2.));
 
 	guiFbm.add(fbmHurst.setup("FBM Hurst", .5, 0., 1.));
 	guiFbm.add(fbmFrequency.setup("FBM frequency", 2., 0., 4.));
 	guiFbm.add(fbmOctaves.setup("FBM Octaves", 8, 1, 12));
-	guiFbm.add(fbmWarp.setup("FBM Warp", 3, 0, 4));
+	guiFbm.add(fbmWarp.setup("FBM Warp", 3, 1, 4));
+	
 	guiFbm.add(center.setup("center", ofVec2f(.0, .0), ofVec2f(.0, .0), ofVec2f(10., 10.)));
 
 	guiColors.add(colorsColor1Red.setup("COLOR 1 RED", 0., 0., 1.));
@@ -65,6 +68,10 @@ void ofApp::setup(){
 	guiColors.add(colorsColor4Red.setup("COLOR 4 RED", 0., 0., 1.));
 	guiColors.add(colorsColor4Green.setup("COLOR 4 GREEN", 0., 0., 1.));
 	guiColors.add(colorsColor4Blue.setup("COLOR 4 BLUE", 0., 0., 1.));
+
+	guiVariations.add(fbmRotation.setup("FBM Rot", 0., 0., 1.));
+	guiVariations.add(warpRotation.setup("WARP Rot", 0., 0., 1.));
+	guiVariations.add(noiseSeed.setup("noise seed", 1., 1., 2.));
 }
 
 //--------------------------------------------------------------
@@ -96,6 +103,8 @@ void ofApp::update(){
 		fbmShader.setUniform1f("fbmFrequency", fbmFrequency);
 		fbmShader.setUniform1i("fbmOctaves", fbmOctaves);
 		fbmShader.setUniform1i("fbmWarp", fbmWarp);
+		fbmShader.setUniform1f("fbmRotation", fbmRotation);
+		fbmShader.setUniform1f("warpRotation", warpRotation);
 		fbmShader.setUniform2f("center", center);
 
 		fbmShader.setUniform1f("colorsColor1Red", colorsColor1Red);
@@ -121,7 +130,7 @@ void ofApp::update(){
 		// end shader
 		fbmShader.end();
 
-	// close fbo
+	// close fbo	
 	fbo.end();
 }
 
@@ -134,6 +143,7 @@ void ofApp::draw(){
 	guiNoises.draw();
 	guiFbm.draw();
 	guiColors.draw();
+	guiVariations.draw();
 }
 
 //--------------------------------------------------------------

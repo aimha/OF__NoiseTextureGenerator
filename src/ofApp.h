@@ -29,6 +29,7 @@ class ofApp : public ofBaseApp{
 
 		// GUI
 		ofxPanel guiNoises;
+		ofxPanel guiVariations;
 		ofxPanel guiFbm;
 		ofxPanel guiColors;
 
@@ -52,6 +53,9 @@ class ofApp : public ofBaseApp{
 		ofxFloatSlider fbmFrequency;
 		ofxIntSlider fbmOctaves;
 		ofxIntSlider fbmWarp;
+		ofxFloatSlider fbmRotation;
+
+		ofxFloatSlider warpRotation;
 
 		ofxFloatSlider colorsColor1Red;
 		ofxFloatSlider colorsColor1Green;
