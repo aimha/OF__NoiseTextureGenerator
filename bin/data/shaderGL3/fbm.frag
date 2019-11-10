@@ -166,7 +166,7 @@ float fbm (in vec2 st) {
 
   for (int i = 0; i < fbmOctaves; i++) {
     value += amplitude * (
-      (valueAmnt * vnoise2D(st) * valueNoise) +
+      //(valueAmnt * vnoise2D(st) * valueNoise) +
       (simplexAmnt * snoise2D(st) * simplexNoise) +
       (gradientAmnt * gnoise2D(st) * gradientNoise) +
       (voronoiAmnt * voronoi2D(st) * voronoiNoise)
