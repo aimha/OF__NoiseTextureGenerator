@@ -40,17 +40,17 @@ void ofApp::setup(){
 	//guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
 	//guiNoises.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
 	guiNoises.add(gradientNoise.setup("gradient noise", true));
-	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 4.));
+	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 8.));
 	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
 	guiNoises.add(simplexNoise.setup("simplex noise", true));
-	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 4.));
+	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 8.));
 	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
 	guiNoises.add(voronoiNoise.setup("voronoi noise", true));
-	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 4.));
+	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 8.));
 	guiNoises.add(voronoiNoiseAmnt.setup("voronoi noise amount", 1., 0., 2.));
 
 	guiFbm.add(fbmHurst.setup("FBM Hurst", .5, 0., 1.));
-	guiFbm.add(fbmFrequency.setup("FBM frequency", 2., 0., 4.));
+	guiFbm.add(fbmFrequency.setup("FBM frequency", 2., 1., 3.));
 	guiFbm.add(fbmOctaves.setup("FBM Octaves", 8, 1, 12));
 	guiFbm.add(fbmWarp.setup("FBM Warp", 3, 1, 4));
 
@@ -125,6 +125,8 @@ void ofApp::update(){
 
 		// plane draw
 		plane.draw();
+
+		ofPopMatrix();
 		
 		// end shader
 		fbmShader.end();

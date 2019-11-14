@@ -1,13 +1,20 @@
 ﻿  ofApp.cpp
-  OF__NoiseTextureGenerator.vcxproj -> C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\OF__NoiseTextureGenerator_debug.exe
+d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(326): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(331): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(912): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(913): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(914): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(915): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
+     Creazione della libreria bin\OF__NoiseTextureGenerator_debug.lib e dell'oggetto bin\OF__NoiseTextureGenerator_debug.exp
+  OF__NoiseTextureGenerator.vcxproj -> D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\OF__NoiseTextureGenerator_debug.exe
   
-  	                   2	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\libs\fmodex\lib\vs\Win32\
-  	  *File supplementare		 1503232	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex64.dll
-  	  *File supplementare		 1552384	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL64.dll
-  	  *File supplementare		 5647872	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\FreeImage.dll
+  	                   2	D:\07_OF\of_v0.10.0_vs2017_release\libs\fmodex\lib\vs\x64\
+  	  *File supplementare		 1266176	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex.dll
+  	  *File supplementare		 1312768	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL.dll
+  	  *File supplementare		 6402560	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\FreeImage.dll
   
-  	                   1	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\libs\FreeImage\lib\vs\Win32\
-  	  *File supplementare		 1266176	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex.dll
-  	  *File supplementare		 1503232	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex64.dll
-  	  *File supplementare		 1312768	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL.dll
-  	  *File supplementare		 1552384	C:\01_DEV\00_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL64.dll
+  	                   1	D:\07_OF\of_v0.10.0_vs2017_release\libs\FreeImage\lib\vs\x64\
+  	  *File supplementare		 1266176	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex.dll
+  	  *File supplementare		 1503232	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodex64.dll
+  	  *File supplementare		 1312768	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL.dll
+  	  *File supplementare		 1552384	D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\fmodexL64.dll
