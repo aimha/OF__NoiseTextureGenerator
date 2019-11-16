@@ -31,20 +31,16 @@ class ofApp : public ofBaseApp{
 		ofxPanel guiNoises;
 		ofxPanel guiVariations;
 		ofxPanel guiFbm;
-		ofxPanel guiColors;
-
-		ofxVec2Slider center;
 
 		ofxFloatSlider noiseSeed;
-		ofxFloatSlider valueNoiseScale;
-		ofxFloatSlider valueNoiseAmnt;
+		ofxFloatSlider contrast;
+		ofxFloatSlider rate;
 		ofxFloatSlider gradientNoiseScale;
 		ofxFloatSlider gradientNoiseAmnt;
 		ofxFloatSlider simplexNoiseScale;
 		ofxFloatSlider simplexNoiseAmnt;
 		ofxFloatSlider voronoiNoiseScale;
 		ofxFloatSlider voronoiNoiseAmnt;
-		ofxToggle valueNoise;
 		ofxToggle gradientNoise;
 		ofxToggle simplexNoise;
 		ofxToggle voronoiNoise;
@@ -56,19 +52,6 @@ class ofApp : public ofBaseApp{
 		ofxFloatSlider fbmRotation;
 
 		ofxFloatSlider warpRotation;
-
-		ofxFloatSlider colorsColor1Red;
-		ofxFloatSlider colorsColor1Green;
-		ofxFloatSlider colorsColor1Blue;
-		ofxFloatSlider colorsColor2Red;
-		ofxFloatSlider colorsColor2Green;
-		ofxFloatSlider colorsColor2Blue;
-		ofxFloatSlider colorsColor3Red;
-		ofxFloatSlider colorsColor3Green;
-		ofxFloatSlider colorsColor3Blue;
-		ofxFloatSlider colorsColor4Red;
-		ofxFloatSlider colorsColor4Green;
-		ofxFloatSlider colorsColor4Blue;
 
 		// PLANE
 		ofPlanePrimitive plane;

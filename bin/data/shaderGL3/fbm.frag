@@ -16,32 +16,27 @@ out vec4 outputColor;
 
 // custom
 
-uniform float time, planeSize, seed;
-
-uniform vec2 center;
+uniform float time, planeSize, seed, rate, contrast;
 
 uniform int fbmOctaves, fbmWarp;
 
-uniform float valueNoise, valueAmnt, valueScale, 
+uniform float /*valueNoise, valueAmnt, valueScale, */   // not used anymore
               gradientNoise, gradientAmnt, gradientScale, 
               simplexNoise, simplexAmnt, simplexScale,
               voronoiNoise, voronoiAmnt, voronoiScale,
-              fbmHurst, fbmFrequency, fbmRotation, warpRotation,
-              colorsColor1Red, colorsColor1Green, colorsColor1Blue,
-              colorsColor2Red, colorsColor2Green, colorsColor2Blue,
-              colorsColor3Red, colorsColor3Green, colorsColor3Blue,
-              colorsColor4Red, colorsColor4Green, colorsColor4Blue;
+              fbmHurst, fbmFrequency, fbmRotation, warpRotation;
 
 #define PI 3.14159265359
+#define speed time * rate / fbmOctaves // find a good way to control speed from OF
 
 /**************************************************************/
 
-// HASH FUNCTIONS
-float vhash (uvec2 x) {
-  uvec2 q = 1103515245U * ((x>>1U) ^ (x.yx));
-  uint n = 1103515245U * ((q.x) ^ (q.y>>3U));
-  return float(n) * (1. / float(0xffffffffU));
-}
+// HASH FUNCTIONS               // USED FOR VALUE NOISE, NOW DISABLED
+// float vhash (uvec2 x) {
+//   uvec2 q = 1103515245U * ((x>>1U) ^ (x.yx));
+//   uint n = 1103515245U * ((q.x) ^ (q.y>>3U));
+//   return float(n) * (1. / float(0xffffffffU));
+// }
 
 vec2 ghash (vec2 x) {
   const vec2 k = vec2(0.3183099, 0.3678794);
@@ -49,28 +44,28 @@ vec2 ghash (vec2 x) {
   return -1.0 + 2.0 * fract(16.0 * k * fract(x.x * x.y * (x.x + x.y)));
 } 
 
-// VALUE NOISE
-float vnoise2D(in vec2 st) {
-  st *= valueScale;
+// VALUE NOISE            -- NOT USED --
+// float vnoise2D(in vec2 st) {
+//   st *= valueScale;
 
-  vec2 ipos = floor(st);
-  vec2 fpos = fract(st);
+//   vec2 ipos = floor(st);
+//   vec2 fpos = fract(st);
 
-  uvec2 i = uvec2(ipos.x, ipos.y);
+//   uvec2 i = uvec2(ipos.x, ipos.y);
 
-  float a = vhash(i);
-  float b = vhash(i + uvec2(1., 0.));
-  float c = vhash(i + uvec2(0., 1.));
-  float d = vhash(i + uvec2(1., 1.));
+//   float a = vhash(i);
+//   float b = vhash(i + uvec2(1., 0.));
+//   float c = vhash(i + uvec2(0., 1.));
+//   float d = vhash(i + uvec2(1., 1.));
 
-  vec2 u = smoothstep(0., 1., fpos);
+//   vec2 u = smoothstep(0., 1., fpos);
 
-  return mix(
-    mix(a, b, u.x),
-    mix(c, d, u.x),
-    u.y
-  );
-}
+//   return mix(
+//     mix(a, b, u.x),
+//     mix(c, d, u.x),
+//     u.y
+//   );
+// }
 
 // GRADIENT NOISE
 float gnoise2D(vec2 st) {
@@ -90,7 +85,7 @@ float gnoise2D(vec2 st) {
     mix(a, b, u.x),
     mix(c, d, u.x),
     u.y
-  );
+  ) * gradientAmnt * gradientNoise;
 }
 
 // SIMPLEX NOISE
@@ -121,7 +116,7 @@ float snoise2D (vec2 st) {
     dot(c, ghash( i + 1.0))                 // gradient computation
   );
 
-  return dot( n, vec3(70.) );              // scaling up the noise
+  return dot( n, vec3(70.) ) * simplexAmnt * simplexNoise;              // scaling up the noise
 }
 
 
@@ -149,7 +144,8 @@ float voronoi2D(in vec2 st) {
       }
     }
   }
-  return minDist;
+
+  return minDist * voronoiAmnt * voronoiNoise;
 }
 
 
@@ -160,17 +156,13 @@ float fbm (in vec2 st) {
   float frequency = 0.;
     
   mat2 fbmRotMat = mat2(
-    cos(fbmRotation * PI), sin(fbmRotation * PI),
-    -sin(fbmRotation * PI), cos(fbmRotation * PI)
+    cos((fbmRotation + speed) * PI), sin((fbmRotation + speed) * PI),
+    -sin((fbmRotation + speed) * PI), cos((fbmRotation + speed) * PI)
   );
 
   for (int i = 0; i < fbmOctaves; i++) {
-    value += amplitude * (
-      //(valueAmnt * vnoise2D(st) * valueNoise) +
-      (simplexAmnt * snoise2D(st) * simplexNoise) +
-      (gradientAmnt * gnoise2D(st) * gradientNoise) +
-      (voronoiAmnt * voronoi2D(st) * voronoiNoise)
-    );
+    value += amplitude * (snoise2D(st) + gnoise2D(st) + voronoi2D(st));
+    value = tanh(value);
     st *= fbmFrequency;
     st = fbmRotMat * st;
     amplitude *= fbmHurst;
@@ -186,8 +178,6 @@ void main()
   float k = 0.;
   float n = 0.;
 
-  st += center;
-
   mat2 warpRotMat = mat2(
     cos(warpRotation * PI), sin(warpRotation * PI),
     -sin(warpRotation * PI), cos(warpRotation * PI)
@@ -198,21 +188,9 @@ void main()
     k = n;
     st = warpRotMat * st;
   }
+  float n_norm = tanh(contrast * n);
 
-  // COLORING
-  vec3 color1 = mix(
-    vec3(colorsColor1Red, colorsColor1Green, colorsColor1Blue),
-    vec3(colorsColor2Red, colorsColor2Green, colorsColor2Blue),
-    n
-  );
+  vec3 color = vec3(n_norm);
 
-  vec3 color2 = mix(
-    vec3(colorsColor3Red, colorsColor3Green, colorsColor3Blue),
-    vec3(colorsColor4Red, colorsColor4Green, colorsColor4Blue),
-    n
-  );
-
-  vec3 color = mix(color1, color2, n);
-
-  outputColor = vec4((n*n*n+.6*n*n+.5*n)*color, 1.);
+  outputColor = vec4(color, 1.);
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Noise_Settings>
+	<gradient_noise>1</gradient_noise>
+	<gradient_noise_scale>3.24</gradient_noise_scale>
+	<gradient_noise_amount>0.51</gradient_noise_amount>
+	<simplex_noise>1</simplex_noise>
+	<simplex_noise_scale>1.48</simplex_noise_scale>
+	<simplex_noise_amount>0.78</simplex_noise_amount>
+	<voronoi_noise>1</voronoi_noise>
+	<voronoi_noise_scale>0.78</voronoi_noise_scale>
+	<voronoi_noise_amount>0.64</voronoi_noise_amount>
+</Noise_Settings>

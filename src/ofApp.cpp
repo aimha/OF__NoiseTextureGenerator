@@ -28,17 +28,12 @@ void ofApp::setup(){
 	guiNoises.setup("Noise Settings", "noiseSettings.xml");
 	guiVariations.setup("Noise Variation", "variationSettings.xml");
 	guiFbm.setup("Fbm Settings", "fbmSettings.xml");
-	guiColors.setup("Colors Settings", "colorsSettings.xml");
 
 	guiNoises.setPosition(50, 0);
 	guiFbm.setPosition(50, 240);
 	guiVariations.setPosition(50, 380);
-	guiColors.setPosition(50, 580);
 	
 
-	//guiNoises.add(valueNoise.setup("value noise", true));
-	//guiNoises.add(valueNoiseScale.setup("value noise scale", .2, 0., 2.));
-	//guiNoises.add(valueNoiseAmnt.setup("value noise amount", 1.2, 0., 2.));
 	guiNoises.add(gradientNoise.setup("gradient noise", true));
 	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 4.));
 	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
@@ -54,23 +49,11 @@ void ofApp::setup(){
 	guiFbm.add(fbmOctaves.setup("FBM Octaves", 8, 1, 12));
 	guiFbm.add(fbmWarp.setup("FBM Warp", 3, 1, 4));
 
-	guiColors.add(colorsColor1Red.setup("COLOR 1 RED", 0., 0., 1.));
-	guiColors.add(colorsColor1Green.setup("COLOR 1 GREEN", 0., 0., 1.));
-	guiColors.add(colorsColor1Blue.setup("COLOR 1 BLUE", 0., 0., 1.));
-	guiColors.add(colorsColor2Red.setup("COLOR 2 RED", 0., 0., 1.));
-	guiColors.add(colorsColor2Green.setup("COLOR 2 GREEN", 0., 0., 1.));
-	guiColors.add(colorsColor2Blue.setup("COLOR 2 BLUE", 0., 0., 1.));
-	guiColors.add(colorsColor3Red.setup("COLOR 3 RED", 0., 0., 1.));
-	guiColors.add(colorsColor3Green.setup("COLOR 3 GREEN", 0., 0., 1.));
-	guiColors.add(colorsColor3Blue.setup("COLOR 3 BLUE", 0., 0., 1.));
-	guiColors.add(colorsColor4Red.setup("COLOR 4 RED", 0., 0., 1.));
-	guiColors.add(colorsColor4Green.setup("COLOR 4 GREEN", 0., 0., 1.));
-	guiColors.add(colorsColor4Blue.setup("COLOR 4 BLUE", 0., 0., 1.));
-
 	guiVariations.add(fbmRotation.setup("FBM Rot", 0., 0., 2.));
 	guiVariations.add(warpRotation.setup("WARP Rot", 0., 0., 2.));
+	guiVariations.add(rate.setup("anim rate", 0., 0., .25));
 	guiVariations.add(noiseSeed.setup("noise seed", 1., 1., 2.));
-	guiVariations.add(center.setup("center", ofVec2f(.0, .0), ofVec2f(.0, .0), ofVec2f(10., 10.)));
+	guiVariations.add(contrast.setup("contrast", 1., 0., 10.));
 }
 
 //--------------------------------------------------------------
@@ -85,9 +68,9 @@ void ofApp::update(){
 		fbmShader.setUniform1f("time", ofGetElapsedTimef());
 		fbmShader.setUniform1f("planeSize", planeSize);
 		fbmShader.setUniform1f("seed", noiseSeed);
-		fbmShader.setUniform1f("valueNoise", valueNoise);
-		fbmShader.setUniform1f("valueScale", valueNoiseScale);
-		fbmShader.setUniform1f("valueAmnt", valueNoiseAmnt);
+		fbmShader.setUniform1f("contrast", contrast);
+		fbmShader.setUniform1f("rate", rate);
+
 		fbmShader.setUniform1f("gradientNoise", gradientNoise);
 		fbmShader.setUniform1f("gradientScale", gradientNoiseScale);
 		fbmShader.setUniform1f("gradientAmnt", gradientNoiseAmnt);
@@ -104,20 +87,6 @@ void ofApp::update(){
 		fbmShader.setUniform1i("fbmWarp", fbmWarp);
 		fbmShader.setUniform1f("fbmRotation", fbmRotation);
 		fbmShader.setUniform1f("warpRotation", warpRotation);
-		fbmShader.setUniform2f("center", center);
-
-		fbmShader.setUniform1f("colorsColor1Red", colorsColor1Red);
-		fbmShader.setUniform1f("colorsColor1Green", colorsColor1Green);
-		fbmShader.setUniform1f("colorsColor1Blue", colorsColor1Blue);
-		fbmShader.setUniform1f("colorsColor2Red", colorsColor2Red);
-		fbmShader.setUniform1f("colorsColor2Green", colorsColor2Green);
-		fbmShader.setUniform1f("colorsColor2Blue", colorsColor2Blue);
-		fbmShader.setUniform1f("colorsColor3Red", colorsColor3Red);
-		fbmShader.setUniform1f("colorsColor3Green", colorsColor3Green);
-		fbmShader.setUniform1f("colorsColor3Blue", colorsColor3Blue);
-		fbmShader.setUniform1f("colorsColor4Red", colorsColor4Red);
-		fbmShader.setUniform1f("colorsColor4Green", colorsColor4Green);
-		fbmShader.setUniform1f("colorsColor4Blue", colorsColor4Blue);
 
 		// matrix transformations
 		ofPushMatrix();
@@ -141,7 +110,6 @@ void ofApp::draw(){
 	// draw gui
 	guiNoises.draw();
 	guiFbm.draw();
-	guiColors.draw();
 	guiVariations.draw();
 }
 
