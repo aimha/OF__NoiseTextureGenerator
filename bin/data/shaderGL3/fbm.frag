@@ -16,7 +16,7 @@ out vec4 outputColor;
 
 // custom
 
-uniform float time, planeSize, seed, rate, contrast;
+uniform float time, planeSize, seed, rateFbm, contrast;
 
 uniform int fbmOctaves, fbmWarp;
 
@@ -24,10 +24,10 @@ uniform float /*valueNoise, valueAmnt, valueScale, */   // not used anymore
               gradientNoise, gradientAmnt, gradientScale, 
               simplexNoise, simplexAmnt, simplexScale,
               voronoiNoise, voronoiAmnt, voronoiScale,
-              fbmHurst, fbmFrequency, fbmRotation, warpRotation;
+              fbmHurst, fbmFrequency, fbmRotation;
 
 #define PI 3.14159265359
-#define speed time * rate / fbmOctaves // find a good way to control speed from OF
+#define alpha (fbmRotation + time * rateFbm / fbmOctaves) * PI
 
 /**************************************************************/
 
@@ -69,6 +69,10 @@ vec2 ghash (vec2 x) {
 
 // GRADIENT NOISE
 float gnoise2D(vec2 st) {
+  if (gradientNoise < 1.) {
+    return 0.;
+  }
+
   st *= gradientScale;
 
   vec2 ipos = floor(st);
@@ -90,6 +94,10 @@ float gnoise2D(vec2 st) {
 
 // SIMPLEX NOISE
 float snoise2D (vec2 st) {
+  if (simplexNoise < 1.) {
+    return 0.;
+  }
+
   st *= simplexScale;
 
   const float K1 = 0.366025404;                 // (sqrt(3)-1)/2;
@@ -116,12 +124,16 @@ float snoise2D (vec2 st) {
     dot(c, ghash( i + 1.0))                 // gradient computation
   );
 
-  return dot( n, vec3(70.) ) * simplexAmnt * simplexNoise;              // scaling up the noise
+  return dot( n, vec3(70.) ) * simplexAmnt;              // scaling up the noise
 }
 
 
 // VORONOI NOISE
 float voronoi2D(in vec2 st) {
+  if (voronoiNoise <1.) {
+    return 0.;
+  }
+
   st *= voronoiScale;
 
 	float minDist = 100.; // we impose a large minDist
@@ -145,7 +157,7 @@ float voronoi2D(in vec2 st) {
     }
   }
 
-  return minDist * voronoiAmnt * voronoiNoise;
+  return minDist * voronoiAmnt;
 }
 
 
@@ -156,8 +168,8 @@ float fbm (in vec2 st) {
   float frequency = 0.;
     
   mat2 fbmRotMat = mat2(
-    cos((fbmRotation + speed) * PI), sin((fbmRotation + speed) * PI),
-    -sin((fbmRotation + speed) * PI), cos((fbmRotation + speed) * PI)
+    cos(alpha), sin(alpha),
+    -sin(alpha), cos(alpha)
   );
 
   for (int i = 0; i < fbmOctaves; i++) {
@@ -178,19 +190,24 @@ void main()
   float k = 0.;
   float n = 0.;
 
-  mat2 warpRotMat = mat2(
-    cos(warpRotation * PI), sin(warpRotation * PI),
-    -sin(warpRotation * PI), cos(warpRotation * PI)
-  );
-
   for (int i = 0; i < fbmWarp; i++) {
     n = fbm(st + k);
     k = n;
-    st = warpRotMat * st;
   }
   float n_norm = tanh(contrast * n);
 
-  vec3 color = vec3(n_norm);
+  // DISABLED COLORING
+  // vec3 col_1 = vec3(42. / 255., 44. / 255., 43. / 255.); 
+  // vec3 col_2 = vec3(220. / 255., 53. / 255., 34. / 255.);
+  // vec3 col_3 = vec3(217. / 255., 203. / 255., 158. / 255.);
+  // vec3 col_4 = vec3(189. / 255., 195. / 255., 199. / 255.);
+
+  // vec3 mix1 = mix(col_4, col_2, n_norm);
+  // vec3 mix2 = mix(col_3, col_1, n_norm);
+
+  // vec3 color =  mix(mix2, mix1, n_norm * n * n);
+
+  vec3 color =  vec3(n_norm);
 
   outputColor = vec4(color, 1.);
 }

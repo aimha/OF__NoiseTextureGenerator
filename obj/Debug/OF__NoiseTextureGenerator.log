@@ -5,7 +5,6 @@ d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(912): 
 d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(913): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
 d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(914): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
 d:\07_of\of_v0.10.0_vs2017_release\libs\openframeworks\math\ofmatrix4x4.h(915): warning C4267: 'argomento': conversione da 'size_t' a 'int'. Possibile perdita di dati.
-     Creazione della libreria bin\OF__NoiseTextureGenerator_debug.lib e dell'oggetto bin\OF__NoiseTextureGenerator_debug.exp
   OF__NoiseTextureGenerator.vcxproj -> D:\07_OF\of_v0.10.0_vs2017_release\apps\myApps\OF__NoiseTextureGenerator\bin\OF__NoiseTextureGenerator_debug.exe
   
   	                   2	D:\07_OF\of_v0.10.0_vs2017_release\libs\fmodex\lib\vs\x64\

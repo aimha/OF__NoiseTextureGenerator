@@ -34,7 +34,8 @@ class ofApp : public ofBaseApp{
 
 		ofxFloatSlider noiseSeed;
 		ofxFloatSlider contrast;
-		ofxFloatSlider rate;
+		ofxFloatSlider rateFbm;
+		
 		ofxFloatSlider gradientNoiseScale;
 		ofxFloatSlider gradientNoiseAmnt;
 		ofxFloatSlider simplexNoiseScale;
@@ -50,8 +51,6 @@ class ofApp : public ofBaseApp{
 		ofxIntSlider fbmOctaves;
 		ofxIntSlider fbmWarp;
 		ofxFloatSlider fbmRotation;
-
-		ofxFloatSlider warpRotation;
 
 		// PLANE
 		ofPlanePrimitive plane;
