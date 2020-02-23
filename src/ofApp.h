@@ -31,11 +31,13 @@ class ofApp : public ofBaseApp{
 		ofxPanel guiNoises;
 		ofxPanel guiVariations;
 		ofxPanel guiFbm;
+		ofxPanel guiColor;
 
 		ofxFloatSlider noiseSeed;
 		ofxFloatSlider contrast;
+		ofxFloatSlider scale;
 		ofxFloatSlider rateFbm;
-		
+
 		ofxFloatSlider gradientNoiseScale;
 		ofxFloatSlider gradientNoiseAmnt;
 		ofxFloatSlider simplexNoiseScale;
@@ -52,16 +54,23 @@ class ofApp : public ofBaseApp{
 		ofxIntSlider fbmWarp;
 		ofxFloatSlider fbmRotation;
 
+		ofxColorSlider color_1;
+		ofxColorSlider color_2;
+		ofxColorSlider color_3;
+		ofxColorSlider color_4;
+
 		// PLANE
 		ofPlanePrimitive plane;
+
+		// MESH
+		ofMesh mesh;
 
 		// SHADER
 		ofShader fbmShader;
 
 		// FBO
-		ofFbo fbo;
+		ofFbo Fbmfbo;
 
 		// SAVE IMG
 		ofPixels pix;
-
 };

@@ -20,6 +20,8 @@ uniform float time, planeSize, seed, rateFbm, contrast;
 
 uniform int fbmOctaves, fbmWarp;
 
+uniform vec4 c1, c2, c3, c4;
+
 uniform float /*valueNoise, valueAmnt, valueScale, */   // not used anymore
               gradientNoise, gradientAmnt, gradientScale, 
               simplexNoise, simplexAmnt, simplexScale,
@@ -197,17 +199,15 @@ void main()
   float n_norm = tanh(contrast * n);
 
   // DISABLED COLORING
-  // vec3 col_1 = vec3(42. / 255., 44. / 255., 43. / 255.); 
-  // vec3 col_2 = vec3(220. / 255., 53. / 255., 34. / 255.);
-  // vec3 col_3 = vec3(217. / 255., 203. / 255., 158. / 255.);
-  // vec3 col_4 = vec3(189. / 255., 195. / 255., 199. / 255.);
+  vec3 col_1 = c1.xyz; 
+  vec3 col_2 = c2.xyz;
+  vec3 col_3 = c3.xyz;
+  vec3 col_4 = c4.xyz;
 
-  // vec3 mix1 = mix(col_4, col_2, n_norm);
-  // vec3 mix2 = mix(col_3, col_1, n_norm);
+  vec3 mix1 = mix(col_1, col_2, n_norm);
+  vec3 mix2 = mix(col_3, col_4, n_norm);
 
-  // vec3 color =  mix(mix2, mix1, n_norm * n * n);
-
-  vec3 color =  vec3(n_norm);
+  vec3 color =  mix(mix2, mix1, st.x);
 
   outputColor = vec4(color, 1.);
 }
