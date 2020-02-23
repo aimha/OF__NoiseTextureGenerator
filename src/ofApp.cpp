@@ -10,7 +10,8 @@ void ofApp::setup(){
 	// set variables
 	w = ofGetWidth();
 	h = ofGetHeight();
-	planeSize = 1000;
+	planeSize = 1200;
+	planeRes = 2;
 
 	// shader setup
 	fbmShader.load("shaderGL3/fbm");
@@ -21,7 +22,10 @@ void ofApp::setup(){
 	//plane setup
 	plane.set(planeSize, planeSize);
 	plane.setPosition(0, 0, 0);
-	plane.setResolution(2, 2);
+	plane.setResolution(planeRes, planeRes);
+
+	// fbo setup
+	fbo.allocate(w, h);
 
 	// gui setup
 	guiNoises.setup("Noise Settings", "noiseSettings.xml");
@@ -29,20 +33,19 @@ void ofApp::setup(){
 	guiFbm.setup("Fbm Settings", "fbmSettings.xml");
 	guiColor.setup("Color Settings", "colorSettings.xml");
 
-	guiNoises.setPosition(1700, 0);
-	guiFbm.setPosition(1700, 240);
-	guiVariations.setPosition(1700, 380);
-	guiColor.setPosition(1900, 0);
+	guiNoises.setPosition(50, 0);
+	guiFbm.setPosition(50, 240);
+	guiVariations.setPosition(50, 380);
 
 	guiNoises.add(gradientNoise.setup("gradient noise", true));
-	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 12.));
-	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 4.));
+	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 4.));
+	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
 	guiNoises.add(simplexNoise.setup("simplex noise", true));
-	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 12.));
-	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 4.));
+	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 4.));
+	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
 	guiNoises.add(voronoiNoise.setup("voronoi noise", true));
-	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 12.));
-	guiNoises.add(voronoiNoiseAmnt.setup("voronoi noise amount", 1., 0., 4.));
+	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 4.));
+	guiNoises.add(voronoiNoiseAmnt.setup("voronoi noise amount", 1., 0., 2.));
 
 	guiFbm.add(fbmHurst.setup("FBM Hurst", .5, 0., 1.));
 	guiFbm.add(fbmFrequency.setup("FBM frequency", 2., 0., 4.));
@@ -50,14 +53,10 @@ void ofApp::setup(){
 	guiFbm.add(fbmWarp.setup("FBM Warp", 3, 1, 4));
 
 	guiVariations.add(fbmRotation.setup("FBM Rot", 0., 0., 2.));
-	guiVariations.add(rateFbm.setup("anim rate FBM", 0., 0., .25));
+	guiVariations.add(warpRotation.setup("WARP Rot", 0., 0., 2.));
+	guiVariations.add(rate.setup("anim rate", 0., 0., .25));
 	guiVariations.add(noiseSeed.setup("noise seed", 1., 1., 2.));
-	guiVariations.add(contrast.setup("contrast", 1., 0., 15.));
-
-	guiColor.add(color_1.setup("color_1", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
-	guiColor.add(color_2.setup("color_2", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
-	guiColor.add(color_3.setup("color_3", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
-	guiColor.add(color_4.setup("color_4", ofColor(100, 100, 140), ofColor(0, 0), ofColor(255, 255)));
+	guiVariations.add(contrast.setup("contrast", 1., 0., 10.));
 }
 
 //--------------------------------------------------------------
@@ -73,7 +72,7 @@ void ofApp::update(){
 		fbmShader.setUniform1f("planeSize", planeSize);
 		fbmShader.setUniform1f("seed", noiseSeed);
 		fbmShader.setUniform1f("contrast", contrast);
-		fbmShader.setUniform1f("rateFbm", rateFbm);
+		fbmShader.setUniform1f("rate", rate);
 
 		fbmShader.setUniform1f("gradientNoise", gradientNoise);
 		fbmShader.setUniform1f("gradientScale", gradientNoiseScale);
@@ -90,6 +89,7 @@ void ofApp::update(){
 		fbmShader.setUniform1i("fbmOctaves", fbmOctaves);
 		fbmShader.setUniform1i("fbmWarp", fbmWarp);
 		fbmShader.setUniform1f("fbmRotation", fbmRotation);
+		fbmShader.setUniform1f("warpRotation", warpRotation);
 
 		fbmShader.setUniform4f("c1", ofColor(color_1));
 		fbmShader.setUniform4f("c2", ofColor(color_2));
@@ -98,11 +98,12 @@ void ofApp::update(){
 
 		// matrix transformations
 		ofPushMatrix();
-			ofTranslate(planeSize / 2., planeSize / 2.);
-			plane.draw(); // plane draw
-		ofPopMatrix();
+		ofTranslate(w / 2., h / 2.);
 
-		// end FBM shader
+		// plane draw
+		plane.draw();
+		
+		// end shader
 		fbmShader.end();
 
 	// close FBM fbo
@@ -111,8 +112,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	// draw FBM fbo
-	Fbmfbo.draw( 50., 50., 1200., 1200.);
+	// draw fbo
+	fbo.draw(0, 0, w, h);
 
 	// draw gui
 	guiNoises.draw();
