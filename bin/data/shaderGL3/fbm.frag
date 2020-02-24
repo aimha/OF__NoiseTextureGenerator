@@ -33,41 +33,11 @@ uniform float /*valueNoise, valueAmnt, valueScale, */   // not used anymore
 
 /**************************************************************/
 
-// HASH FUNCTIONS               // USED FOR VALUE NOISE, NOW DISABLED
-// float vhash (uvec2 x) {
-//   uvec2 q = 1103515245U * ((x>>1U) ^ (x.yx));
-//   uint n = 1103515245U * ((q.x) ^ (q.y>>3U));
-//   return float(n) * (1. / float(0xffffffffU));
-// }
-
 vec2 ghash (vec2 x) {
   const vec2 k = vec2(0.3183099, 0.3678794);
   x = x*k + k.yx + seed;
   return -1.0 + 2.0 * fract(16.0 * k * fract(x.x * x.y * (x.x + x.y)));
 } 
-
-// VALUE NOISE            -- NOT USED --
-// float vnoise2D(in vec2 st) {
-//   st *= valueScale;
-
-//   vec2 ipos = floor(st);
-//   vec2 fpos = fract(st);
-
-//   uvec2 i = uvec2(ipos.x, ipos.y);
-
-//   float a = vhash(i);
-//   float b = vhash(i + uvec2(1., 0.));
-//   float c = vhash(i + uvec2(0., 1.));
-//   float d = vhash(i + uvec2(1., 1.));
-
-//   vec2 u = smoothstep(0., 1., fpos);
-
-//   return mix(
-//     mix(a, b, u.x),
-//     mix(c, d, u.x),
-//     u.y
-//   );
-// }
 
 // GRADIENT NOISE
 float gnoise2D(vec2 st) {
@@ -177,8 +147,12 @@ void main()
   vec2 st = gl_FragCoord.xy / vec2(planeSize, planeSize);
 
   // DOMAIN WARPING
-  float k = 0.;
-  float n = 0.;
+  float k_1 = 0.;
+  float k_2 = 0.;
+  float k_3 = 0.;
+  float n_1 = 0.;
+  float n_2 = 0.;
+  float n_3 = 0.;
 
   mat2 warpRotMat = mat2(
     cos(warpRotation * PI), sin(warpRotation * PI),
@@ -186,13 +160,25 @@ void main()
   );
 
   for (int i = 0; i < fbmWarp; i++) {
-    n = fbm(st + k);
-    k = n;
+    n_1 = fbm(st + k_1);
+    k_1 = n_1;
+    n_2 = fbm( vec2(st + vec2(.75)) + k_2);
+    k_2 = n_2;
+    n_3 = fbm( vec2(st + vec2(1.15)) + k_3);
+    k_3 = n_3;
     st = warpRotMat * st;
   }
-  float n_norm = tanh(contrast * n);
 
-  vec3 color = vec3(n_norm);
+  float n_1_norm = tanh(contrast * n_1);
+  float n_2_norm = tanh(contrast * n_2);
+  float n_3_norm = tanh(contrast * n_3);
+
+  vec3 n = vec3((n_1_norm + n_2_norm + n_3_norm) / 3.);
+
+  vec3 col_1 = vec3(1., 0., .5);
+  vec3 col_2 = vec3(.1, 0., .25);
+
+  vec3 color = vec3(mix(col_1, col_2, n));
 
   outputColor = vec4(color, 1.);
 }

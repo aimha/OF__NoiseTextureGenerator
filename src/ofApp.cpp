@@ -10,23 +10,40 @@ void ofApp::setup(){
 	// set variables
 	w = ofGetWidth();
 	h = ofGetHeight();
-	planeSize = 1200;
+	planeSize = 1000;
 	planeRes = 2;
 
 	// shader setup
 	fbmShader.load("shaderGL3/fbm");
+	displaceShader.load("shaderGL3/displace");
 
 	// fbo setup
-	Fbmfbo.allocate(planeSize, planeSize);
+	fbmFbo.allocate(planeSize, planeSize);
 
-	//plane setup
+	ofFbo fbo;
+
+	fboSettings.width = w;
+	fboSettings.height	= h;
+	fboSettings.internalformat = GL_RGBA;
+	fboSettings.useDepth = true;
+	fboSettings.depthStencilAsTexture = true;
+	displaceFbo.allocate(fboSettings);
+
+	// planes setup
 	plane.set(planeSize, planeSize);
 	plane.setPosition(0, 0, 0);
 	plane.setResolution(planeRes, planeRes);
 
-	// fbo setup
-	fbo.allocate(w, h);
+	planeToMesh.set(planeSize, planeSize);
+	planeToMesh.setPosition(0, 0, 0);
+	planeToMesh.setResolution(100, 100);
+	planeToMesh.mapTexCoordsFromTexture(fbmFbo.getTextureReference());
 
+	// mesh setup
+	mesh = planeToMesh.getMesh();
+	mesh.setMode(OF_PRIMITIVE_POINTS);
+	mesh.enableColors();
+	
 	// gui setup
 	guiNoises.setup("Noise Settings", "noiseSettings.xml");
 	guiVariations.setup("Noise Variation", "variationSettings.xml");
@@ -37,12 +54,10 @@ void ofApp::setup(){
 	guiFbm.setPosition(50, 240);
 	guiVariations.setPosition(50, 380);
 
-	guiNoises.add(gradientNoise.setup("gradient noise", true));
 	guiNoises.add(gradientNoiseScale.setup("gradient noise scale", .5, 0., 4.));
 	guiNoises.add(gradientNoiseAmnt.setup("gradient noise amount", 1., 0., 2.));
 	guiNoises.add(simplexNoise.setup("simplex noise", true));
 	guiNoises.add(simplexNoiseScale.setup("simplex noise scale", .5, 0., 4.));
-	guiNoises.add(simplexNoiseAmnt.setup("simplex noise amount", 1., 0., 2.));
 	guiNoises.add(voronoiNoise.setup("voronoi noise", true));
 	guiNoises.add(voronoiNoiseScale.setup("voronoi noise scale", .5, 0., 4.));
 	guiNoises.add(voronoiNoiseAmnt.setup("voronoi noise amount", 1., 0., 2.));
@@ -61,10 +76,10 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	// open FBM fbo
-	Fbmfbo.begin();
-
-		// start FBM shader
+	// open fbo
+	fbmFbo.begin();
+		
+		// start shader
 		fbmShader.begin();
 
 		// pass uniforms to shader
@@ -98,22 +113,56 @@ void ofApp::update(){
 
 		// matrix transformations
 		ofPushMatrix();
-		ofTranslate(w / 2., h / 2.);
+			ofTranslate(planeSize / 2., planeSize / 2.);
 
-		// plane draw
-		plane.draw();
+			// plane draw
+			plane.draw();
+		
+		ofPopMatrix(); 
 		
 		// end shader
 		fbmShader.end();
 
-	// close FBM fbo
-	Fbmfbo.end();
+	// close fbo	
+	fbmFbo.end();
+
+	//*******************************************************//
+
+	ofEnableDepthTest();
+
+	// open fbo
+	displaceFbo.begin();
+
+	ofClear(0);
+
+		// start shader
+		displaceShader.begin();
+
+		displaceShader.setUniform1f("planeSize", planeSize);
+		displaceShader.setUniformTexture("tex0", fbmFbo.getTexture(), 0);
+
+		// draw mesh
+		ofPushMatrix();
+			ofTranslate(w / 2. + 300., h / 2. + 100.);
+			ofRotateX(-90.);
+			mesh.drawWireframe();
+		ofPopMatrix();
+
+		// end shader
+		displaceShader.end();
+
+	// close fbo	
+	displaceFbo.end();
+
+	ofDisableDepthTest();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	// draw fbo
-	fbo.draw(0, 0, w, h);
+	displaceFbo.draw(0., 0., w, h);
+	fbmFbo.draw(0., 0., 500., 500.);
+		
 
 	// draw gui
 	guiNoises.draw();
@@ -124,12 +173,9 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if (key == 's') {
-		Fbmfbo.readToPixels(pix);
-		float timeStamp = ofGetSystemTimeMillis();
-		string imgName = ofToString(timeStamp) + "--grad.jpg";
-		ofSaveImage(pix, imgName);
-	}
+	displaceFbo.begin();
+		ofClear(0);
+	displaceFbo.end();
 }
 
 //--------------------------------------------------------------

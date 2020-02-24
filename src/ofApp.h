@@ -56,15 +56,22 @@ class ofApp : public ofBaseApp{
 
 		// PLANE
 		ofPlanePrimitive plane;
+		ofPlanePrimitive planeToMesh;
+
+		// MESH
+		ofMesh mesh;
 
 		// MESH
 		ofMesh mesh;
 
 		// SHADER
 		ofShader fbmShader;
+		ofShader displaceShader;
 
 		// FBO
-		ofFbo Fbmfbo;
+		ofFbo fbmFbo;
+		ofFbo displaceFbo;
+		ofFbo::Settings fboSettings;
 
 		// SAVE IMG
 		ofPixels pix;
